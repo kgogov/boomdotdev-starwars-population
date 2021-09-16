@@ -19,9 +19,12 @@ export default class StarWarsUniverse extends EventEmitter {
         }
     }
 
+    _onPopulatingCompleted() {
+        this.emit(StarWarsUniverse.events.UNIVERSE_POPULATED);
+    }
+
     _onPersonBorn(data) {
         const films = data.filmsUrl;
-        console.log(films);
 
         films.forEach(url => {
             let shouldAdd = true;
@@ -83,7 +86,6 @@ export default class StarWarsUniverse extends EventEmitter {
         const planets = await this.getPlanets();
         const emptyPlanet = this.getEmptyPlanet(planets);
 
-
         const planet = new Planet(emptyPlanet.name, config.DELAY, people);
         this.planet = planet;
 
@@ -92,7 +94,7 @@ export default class StarWarsUniverse extends EventEmitter {
         })
 
         planet.once(Planet.events.POPULATING_COMPLETED, () => {
-            this.emit(StarWarsUniverse.events.UNIVERSE_POPULATED);
+            this._onPopulatingCompleted();
         })
     }
 }

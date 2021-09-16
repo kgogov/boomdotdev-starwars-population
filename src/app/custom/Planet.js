@@ -28,13 +28,11 @@ export default class Planet extends EventEmitter {
     async populate() {
         await delay(this.config);
 
-        const current = this.peopleData[this.peopleCounter];
-        const person = new Person(current.name, current.height, current.mass);
-
-        this.population.push(person);
+        const currentEntitiy = this.peopleData[this.peopleCounter];
+        this.population.push(new Person(currentEntitiy.name, currentEntitiy.height, currentEntitiy.mass));
 
         this.emit(Planet.events.PERSON_BORN, {
-            filmsUrl: this.peopleData[this.peopleCounter].films
+            filmsUrl: currentEntitiy.films
         });
 
         this.peopleCounter++;
