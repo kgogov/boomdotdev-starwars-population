@@ -20,6 +20,8 @@ export default class StarWarsUniverse extends EventEmitter {
     }
 
     _onPopulatingCompleted() {
+        console.log(this.planet.populationCount);
+        console.log(this.films.length);
         this.emit(StarWarsUniverse.events.UNIVERSE_POPULATED);
     }
 
@@ -88,10 +90,10 @@ export default class StarWarsUniverse extends EventEmitter {
             this._onPersonBorn(e.filmsUrl);
         });
 
-        this.planet.once(Planet.events.POPULATING_COMPLETED, () => {
+        this.planet.on(Planet.events.POPULATING_COMPLETED, () => {
             this._onPopulatingCompleted();
         });
 
-        await planet.populate();
+        await this.planet.populate();
     }
 }
