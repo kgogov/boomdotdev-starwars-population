@@ -35,7 +35,6 @@ export default class Application extends EventEmitter {
     this.data.universe = new StarWarsUniverse();
 
     await this.data.universe.init();
-    await this.data.universe.planet.populate();
 
     this.emit(Application.events.APP_READY);
   }
