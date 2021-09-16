@@ -86,14 +86,14 @@ export default class StarWarsUniverse extends EventEmitter {
         const planets = await this.getPlanets();
         const emptyPlanet = this.getEmptyPlanet(planets);
 
-        const planet = new Planet(emptyPlanet.name, config.DELAY, people);
-        this.planet = planet;
+        const planet = new Planet(emptyPlanet.name, config.POPULATION_DELAY, people);
 
         planet.on(Planet.events.PERSON_BORN, (filmUrl) => {
             this._onPersonBorn(filmUrl);
         });
 
-        planet.once(Planet.events.POPULATING_COMPLETED, () => {
+        planet.once(Planet.events.POPULATING_COMPLETED, (data) => {
+            this.planet = data;
             this._onPopulatingCompleted();
         });
 

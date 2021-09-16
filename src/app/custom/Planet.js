@@ -40,7 +40,7 @@ export default class Planet extends EventEmitter {
         if (this.peopleCounter !== this.peopleData.length) {
             await this.populate();
         } else {
-            return this.emit(Planet.events.POPULATING_COMPLETED);
+            this.emit(Planet.events.POPULATING_COMPLETED, this);
         }
     }
 }
