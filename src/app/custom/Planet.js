@@ -21,12 +21,8 @@ export default class Planet extends EventEmitter {
         }
     }
 
-    get populationCount() {
-        return this.population.length;
-    }
-
     async populate() {
-        await delay(this.config);
+        await delay(this.config.populationDelay);
 
         const currentEntitiy = this.peopleData[this.peopleCounter];
         this.population.push(new Person(currentEntitiy.name, currentEntitiy.height, currentEntitiy.mass));
@@ -40,7 +36,11 @@ export default class Planet extends EventEmitter {
         if (this.peopleCounter !== this.peopleData.length) {
             await this.populate();
         } else {
-            this.emit(Planet.events.POPULATING_COMPLETED, this);
+            this.emit(Planet.events.POPULATING_COMPLETED);
         }
+    }
+
+    get populationCount() {
+        return this.population.length;
     }
 }

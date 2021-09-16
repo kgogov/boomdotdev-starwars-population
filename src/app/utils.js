@@ -1,7 +1,10 @@
 /**
  * Here you can define helper functions to use across your app.
  */
-export async function delay(ms) { return new Promise(resolve => setTimeout(resolve, ms)); }
+export async function delay(seconds) { 
+    return new Promise(resolve => setTimeout(resolve, seconds * 1000)); 
+}
+
 export async function fetchAndDecode(url) {
     try {
         const response = await fetch(url);
