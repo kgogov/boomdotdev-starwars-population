@@ -23,10 +23,8 @@ export default class StarWarsUniverse extends EventEmitter {
         this.emit(StarWarsUniverse.events.UNIVERSE_POPULATED);
     }
 
-    _onPersonBorn(data) {
-        const films = data.filmsUrl;
-
-        films.forEach(url => {
+    _onPersonBorn(filmsUrl) {
+        filmsUrl.forEach(url => {
             let shouldAdd = true;
 
             this.films.forEach(film => {
@@ -73,9 +71,6 @@ export default class StarWarsUniverse extends EventEmitter {
         return planets;
     }
 
-    /**
-     * Description: It fetches the first 10 people
-     */
     async getPeople() {
         const data = await fetchAndDecode(config.PEOPLE_BASE_URL);
         return [...data.results];
@@ -86,14 +81,14 @@ export default class StarWarsUniverse extends EventEmitter {
         const planets = await this.getPlanets();
         const emptyPlanet = this.getEmptyPlanet(planets);
 
-        const planet = new Planet(emptyPlanet.name, config.POPULATION_DELAY, people);
+        const planet = new Planet(emptyPlanet.name, config, people);
+        this.planet = planet;
 
-        planet.on(Planet.events.PERSON_BORN, (filmUrl) => {
-            this._onPersonBorn(filmUrl);
+        this.planet.on(Planet.events.PERSON_BORN, (e) => {
+            this._onPersonBorn(e.filmsUrl);
         });
 
-        planet.once(Planet.events.POPULATING_COMPLETED, (data) => {
-            this.planet = data;
+        this.planet.once(Planet.events.POPULATING_COMPLETED, () => {
             this._onPopulatingCompleted();
         });
 
